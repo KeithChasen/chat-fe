@@ -3,6 +3,8 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import {Link} from "react-router-dom";
 
+import { useAuthDispatch } from "../context/auth";
+
 const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
       login(email: $email, password: $password) {
@@ -14,7 +16,7 @@ const LOGIN = gql`
 function Login(props) {
   const [login, { loading }] = useMutation(LOGIN, {
     update(_, res) {
-      localStorage.setItem('token', res.data.login.token);
+      dispatch({ type: 'LOGIN', payload: res.data.login });
       props.history.push('/')
     },
     onError(err) {
@@ -28,6 +30,8 @@ function Login(props) {
   });
 
   const [errors, setErrors] = useState({});
+
+  const dispatch = useAuthDispatch();
 
   const submitLoginForm = e => {
     e.preventDefault();
