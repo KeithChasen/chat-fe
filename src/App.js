@@ -8,6 +8,7 @@ import './App.scss';
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Menu from "./pages/Menu";
 
 import { AuthProvider } from './context/auth'
 
@@ -16,6 +17,7 @@ function App() {
     <ApolloProvider client={client}>
       <AuthProvider>
         <BrowserRouter>
+          <Menu/>
           <Container className='pt-5'>
             <Switch>
               <Route exact path='/' component={Home} />
