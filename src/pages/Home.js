@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button, Image } from "react-bootstrap";
 import { gql, useQuery } from "@apollo/client";
+import avatar from '../media/avatar.png'
 
 const GET_USERS = gql`  
   query getUsers {
       getUsers {
           email
+          latestMessage {
+              content
+          }
       }
   }
 `;
@@ -28,15 +32,19 @@ function Home() {
     usersMarkup = <p>No users</p>
   } else if (data.getUsers.length) {
     usersMarkup = data.getUsers.map(user => (
-      <div key={user.email}>
-        <p>{user.email}</p>
+      <div className='d-flex p-3' key={user.email}>
+        <Image src={avatar} roundedCircle className="mr-2" style={{ width: 50, height: 50, objectFit: 'cover'}}/>
+        <div>
+          <p className="text-success">{user.email}</p>
+          <p className="font-weight-light">{user.latestMessage ? user.latestMessage.content : ''}</p>
+        </div>
       </div>
     ));
   }
 
   return (
       <Row className="bg-white">
-        <Col xs={4}>
+        <Col xs={4} className='p-0 bg-secondary'>
           {usersMarkup}
         </Col>
         <Col xs={8}>
