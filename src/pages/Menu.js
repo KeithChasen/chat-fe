@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Row, Col, Form, Button } from "react-bootstrap";
-import { gql, useMutation } from "@apollo/client";
-import {Link} from "react-router-dom";
+import React from 'react';
+import { Row, Button } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
 
 import { useAuthDispatch } from "../context/auth";
 
-function Menu({ history }) {
+function Menu() {
   const dispatch = useAuthDispatch();
 
+  const history = useHistory();
+
   const logout = () => {
-    dispatch({ type: 'LOGOUT' })
+    dispatch({ type: 'LOGOUT' });
     history.push('/');
   };
 
