@@ -24,7 +24,7 @@ function Home() {
 
   return (
       <Row className="bg-white">
-        <Users setSelectedUser={setSelectedUser}/>
+        <Users setSelectedUser={setSelectedUser} selectedUser={selectedUser}/>
         <Col xs={8}>
           {
             messagesData && messagesData.getMessages.length ? (

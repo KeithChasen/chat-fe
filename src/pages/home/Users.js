@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import {Col, Image} from "react-bootstrap";
+import classNames from "classnames";
 import avatar from "../../media/avatar.png";
 import { useMessageDispatch, useMessageState } from "../../context/message";
 
@@ -16,7 +17,7 @@ const GET_USERS = gql`
     }
 `;
 
-function Users({ setSelectedUser }) {
+function Users({ setSelectedUser, selectedUser }) {
     const dispatch = useMessageDispatch();
     const { users } = useMessageState();
 
@@ -31,8 +32,9 @@ function Users({ setSelectedUser }) {
     } else if (!users.length) {
         usersMarkup = <p>No users</p>
     } else if (users.length) {
-        usersMarkup = users.map(user => (
-          <div className='d-flex p-3' key={user.email} onClick={() => setSelectedUser(user.email)}>
+        usersMarkup = users.map(user => {
+          const selected = selectedUser === user.email;
+          return (<div role="button" className= {classNames("user-div d-flex p-3", { 'bg-white': selected })} key={user.email} onClick={() => setSelectedUser(user.email)}>
               <Image
                 src={avatar}
                 roundedCircle
@@ -44,7 +46,7 @@ function Users({ setSelectedUser }) {
                   <p className="font-weight-light">{user.latestMessage ? user.latestMessage.content : ''}</p>
               </div>
           </div>
-        ));
+        )});
     }
 
     return (
