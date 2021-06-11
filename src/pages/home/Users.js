@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import {Col, Image} from "react-bootstrap";
 import avatar from "../../media/avatar.png";
+import { useMessageDispatch, useMessageState } from "../../context/message";
 
 
 const GET_USERS = gql`
@@ -16,15 +17,21 @@ const GET_USERS = gql`
 `;
 
 function Users({ setSelectedUser }) {
-    const { loading, data, error } = useQuery(GET_USERS);
+    const dispatch = useMessageDispatch();
+    const { users } = useMessageState();
+
+    const { loading } = useQuery(GET_USERS, {
+        onCompleted: data => dispatch({ type: 'SET_USERS', payload: data.getUsers }),
+        onError: err => console.log(err)
+    });
 
     let usersMarkup = null;
-    if (!data || loading) {
+    if (!users || loading) {
         usersMarkup = <p>Loading...</p>
-    } else if (!data.getUsers.length) {
+    } else if (!users.length) {
         usersMarkup = <p>No users</p>
-    } else if (data.getUsers.length) {
-        usersMarkup = data.getUsers.map(user => (
+    } else if (users.length) {
+        usersMarkup = users.map(user => (
           <div className='d-flex p-3' key={user.email} onClick={() => setSelectedUser(user.email)}>
               <Image
                 src={avatar}
