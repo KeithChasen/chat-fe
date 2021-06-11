@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { gql,  useLazyQuery } from "@apollo/client";
 import { Col } from "react-bootstrap";
+import { useMessageDispatch, useMessageState } from "../../context/message";
+
 
 const GET_MESSAGES = gql`
     query getMessages($from: String!) {
@@ -9,21 +11,44 @@ const GET_MESSAGES = gql`
         }
     }`;
 
-function Messages({ selectedUser }) {
+function Messages() {
   const [getMessages, { loading: messagesLoading, data: messagesData }] = useLazyQuery(GET_MESSAGES);
+  const { users } = useMessageState();
+  const selectedUser = users?.find(user => user.selected === true);
+  const messages = selectedUser?.messages;
+  const dispatch = useMessageDispatch();
 
   useEffect(() => {
-    if(selectedUser) {
-      getMessages({ variables: { from: selectedUser }})
+    if(selectedUser && !selectedUser.messages) {
+      getMessages({ variables: { from: selectedUser.email }})
     }
   }, [selectedUser]);
 
+  useEffect(() => {
+    if (messagesData) {
+      dispatch({
+        type: 'SET_USER_MESSAGES',
+        payload: {
+          email: selectedUser.email,
+          messages: messagesData.getMessages
+        }
+      })
+    }
+  }, [messagesData]);
+
+  let selectedChatMarkup = null;
+  if (!messages && !messagesLoading) {
+    selectedChatMarkup = <p>Select a friend</p>
+  } else if (messagesLoading) {
+    selectedChatMarkup = <p>Loading...</p>
+  } else if (messages.length) {
+    selectedChatMarkup = messages.map(message => <p key={message.id}>{message.content}</p>)
+  } else if (!messages.length) {
+    selectedChatMarkup = <div><p>You're now connected!</p> <p>You can start conversation with {selectedUser.email}</p></div>
+  }
+
   return (
-    <Col xs={8}>{
-      messagesData && messagesData.getMessages.length ? (
-        messagesData.getMessages.map(message => <p key={message.id}>{message.content}</p>)
-      ) : (<div><p>You're now connected!</p> <p>You can start conversation with {selectedUser}</p></div>)}
-    </Col>
+    <Col xs={8}>{selectedChatMarkup}</Col>
   )
 }
 

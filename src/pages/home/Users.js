@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import {Col, Image} from "react-bootstrap";
+import React from 'react';
+import { gql, useQuery } from "@apollo/client";
+import { Col, Image } from "react-bootstrap";
 import classNames from "classnames";
 import avatar from "../../media/avatar.png";
 import { useMessageDispatch, useMessageState } from "../../context/message";
-
 
 const GET_USERS = gql`
     query getUsers {
@@ -17,9 +16,10 @@ const GET_USERS = gql`
     }
 `;
 
-function Users({ setSelectedUser, selectedUser }) {
+function Users() {
     const dispatch = useMessageDispatch();
     const { users } = useMessageState();
+    const selectedUser = users?.find(user => user.selected === true)?.email;
 
     const { loading } = useQuery(GET_USERS, {
         onCompleted: data => dispatch({ type: 'SET_USERS', payload: data.getUsers }),
@@ -34,7 +34,12 @@ function Users({ setSelectedUser, selectedUser }) {
     } else if (users.length) {
         usersMarkup = users.map(user => {
           const selected = selectedUser === user.email;
-          return (<div role="button" className= {classNames("user-div d-flex p-3", { 'bg-white': selected })} key={user.email} onClick={() => setSelectedUser(user.email)}>
+          return (
+            <div
+              role="button"
+              className= {classNames("user-div d-flex p-3", { 'bg-white': selected })}
+              key={user.email} onClick={() => dispatch({ type: 'SET_SELECTED_USER', payload: user.email })}
+            >
               <Image
                 src={avatar}
                 roundedCircle
