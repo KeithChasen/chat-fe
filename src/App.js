@@ -6,7 +6,7 @@ import { BrowserRouter, Switch } from "react-router-dom";
 import client from "./ApolloClient";
 import './App.scss';
 import Register from "./pages/Register";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import Login from "./pages/Login";
 import Menu from "./pages/Menu";
 
