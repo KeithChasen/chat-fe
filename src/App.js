@@ -11,12 +11,14 @@ import Login from "./pages/Login";
 import Menu from "./pages/Menu";
 
 import { AuthProvider } from './context/auth'
+import { MessageProvider } from './context/message'
 import DynamicRoute from "./util/dynamicRoute";
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
+      <MessageProvider>
         <BrowserRouter>
           <Menu/>
           <Container className='pt-5'>
@@ -27,6 +29,7 @@ function App() {
             </Switch>
           </Container>
         </BrowserRouter>
+      </MessageProvider>
       </AuthProvider>
     </ApolloProvider>
   );
