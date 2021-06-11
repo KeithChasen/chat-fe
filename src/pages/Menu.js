@@ -1,17 +1,14 @@
 import React from 'react';
 import { Row, Button } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useAuthDispatch } from "../context/auth";
 
 function Menu() {
   const dispatch = useAuthDispatch();
-
-  const history = useHistory();
-
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
-    history.push('/');
+    window.location.href = '/';
   };
 
   return (
