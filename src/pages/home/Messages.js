@@ -54,7 +54,7 @@ function Messages() {
   }
 
   return (
-    <Col xs={8} className="messages-box d-flex flex-column-reverse">{selectedChatMarkup}</Col>
+    <Col xs={10} md={8} className="messages-box d-flex flex-column-reverse">{selectedChatMarkup}</Col>
   )
 }
 

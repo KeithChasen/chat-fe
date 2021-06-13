@@ -6,9 +6,6 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 function Message({ message }) {
   const { user } = useAuthState();
-
-  console.log(message, 'message')
-
   const sent = message.from === user.email;
   const received = !sent;
   return (<OverlayTrigger
