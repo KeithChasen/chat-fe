@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useAuthDispatch } from "../context/auth";
 
@@ -17,7 +17,7 @@ function Login(props) {
   const [login, { loading }] = useMutation(LOGIN, {
     update(_, res) {
       dispatch({ type: 'LOGIN', payload: res.data.login });
-      props.history.push('/')
+      window.location.href = '/';
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.errors)

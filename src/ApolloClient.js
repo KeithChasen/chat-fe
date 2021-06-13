@@ -28,7 +28,7 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
-const httpLink = authLink.concat(createHttpLink({
+const httpLink = authLink.concat(new HttpLink({
   uri: 'http://localhost:4000/'
 }));
 
@@ -46,7 +46,7 @@ const splitLink = split(
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: httpLink
+  link: splitLink
 });
 
 export default client;

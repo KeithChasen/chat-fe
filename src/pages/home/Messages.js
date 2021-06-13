@@ -28,11 +28,7 @@ function Messages() {
   const dispatch = useMessageDispatch();
   const [content, setContent] = useState('');
   const [sendMessage] = useMutation(SEND_MESSAGE, {
-    onError: err => console.log(err),
-    onCompleted: data => dispatch({ type: 'ADD_MESSAGE', payload: {
-      email: selectedUser.email,
-        message: data.sendMessage
-      }})
+    onError: err => console.log(err)
   });
 
   const submitMessage = e => {
